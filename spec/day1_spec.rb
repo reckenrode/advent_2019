@@ -13,6 +13,7 @@ require "advent_2019/day1"
 RSpec.describe Day do
   context "calculating fuel for a single module" do
     [
+      {name: "should require 0 fuel", input: {mass: 1}, expected: {fuel: 0}},
       {name: "is evenly divisible", input: {mass: 12}, expected: {fuel: 2}},
       {name: "needs rounding", input: {mass: 14}, expected: {fuel: 2}},
       {name: "is large", input: {mass: 100756}, expected: {fuel: 33583}},

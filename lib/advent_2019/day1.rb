@@ -17,7 +17,7 @@ class Day1 < Day
   def self.fuel_requirements(modules, include_fuel = false)
     arr = modules.respond_to?(:reduce) ? modules : [modules]
     fuel = arr.reduce(0) do |total, mass|
-      fuel = (mass / 3).floor - 2
+      fuel = [0, (mass / 3).floor - 2].max
       if include_fuel && fuel > 0
         additional_fuel = fuel_requirements(fuel, include_fuel)
         fuel += additional_fuel if additional_fuel > 0
