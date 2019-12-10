@@ -8,4 +8,15 @@
 # frozen_string_literal: true
 # encoding: utf-8
 
+require "advent_2019/day"
 require "advent_2019/day1/ship"
+
+class Day1 < Day
+  NAME = "day1"
+
+  def run(readers, **_)
+    modules = readers[:lines].map(&:to_i)
+    weight = Ship.fuel_requirements(modules)
+    puts "The fuel requirements for all the modules is #{weight}."
+  end
+end
