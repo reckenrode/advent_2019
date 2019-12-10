@@ -31,6 +31,7 @@ module Advent2019
   #
   # @param [Array<String>] argv the command-line arguments
   def self.main(argv)
+    show_help if argv.count == 0
     Day.new
     day = Day.days[argv.shift]
     options = day.parse!(argv)
@@ -40,7 +41,14 @@ module Advent2019
     end
   end
 
-  def self.show_help(msg)
+  def self.show_help(msg = nil)
+    if msg.nil?
+      msg = OptionParser.new do |parser|
+        parser.banner = "Usage: advent_2019 <day> [options]"
+        parser.on("-h", "--help", "show this help message")
+        parser.separator "\nAvailable Days: #{Day.days.keys.sort.join(", ")}"
+      end
+    end
     puts msg
     exit
   end

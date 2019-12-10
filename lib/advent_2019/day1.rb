@@ -10,11 +10,20 @@
 
 require "advent_2019/day"
 require "advent_2019/day1/ship"
+require "optparse"
 
 class Day1 < Day
   NAME = "day1"
 
   def run(readers, **_)
+  def configure!(parser)
+    options = super(parser)
+    parser.on("--[no-]fuel", "include fuel in the weight calculation") do |b|
+      options[:include_fuel] = b
+    end
+    options
+  end
+
     modules = readers[:lines].map(&:to_i)
     weight = Ship.fuel_requirements(modules)
     puts "The fuel requirements for all the modules is #{weight}."
