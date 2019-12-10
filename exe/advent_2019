@@ -1,3 +1,5 @@
 #!/usr/bin/env ruby
 
 require "advent_2019"
+
+Advent2019.main(ARGV)
