@@ -9,13 +9,24 @@
 # encoding: utf-8
 
 require "advent_2019/day"
-require "advent_2019/day1/ship"
 require "optparse"
 
 class Day1 < Day
   NAME = "day1"
 
-  def run(readers, **_)
+  def self.fuel_requirements(modules, include_fuel = false)
+    arr = modules.respond_to?(:reduce) ? modules : [modules]
+    fuel = arr.reduce(0) do |total, mass|
+      fuel = (mass / 3).floor - 2
+      if include_fuel && fuel > 0
+        additional_fuel = fuel_requirements(fuel, include_fuel)
+        fuel += additional_fuel if additional_fuel > 0
+      end
+      total + fuel
+    end
+    fuel
+  end
+
   def configure!(parser)
     options = super(parser)
     parser.on("--[no-]fuel", "include fuel in the weight calculation") do |b|
@@ -24,8 +35,10 @@ class Day1 < Day
     options
   end
 
+  def run(readers, **kwargs)
     modules = readers[:lines].map(&:to_i)
-    weight = Ship.fuel_requirements(modules)
+    include_fuel = kwargs[:include_fuel] || false
+    weight = Day1.fuel_requirements(modules, include_fuel)
     puts "The fuel requirements for all the modules is #{weight}."
   end
 end
