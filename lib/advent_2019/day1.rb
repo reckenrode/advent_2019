@@ -28,16 +28,15 @@ class Day1 < Day
   end
 
   def configure!(parser)
-    options = super(parser)
-    parser.on("--[no-]fuel", "include fuel in the weight calculation") do |b|
-      options[:include_fuel] = b
-    end
-    options
+    parser = super(parser)
+    parser.on("--include-fuel", "include fuel in the weight calculation",
+      TrueClass)
+    parser
   end
 
-  def run(readers, **kwargs)
-    modules = readers[:lines].map(&:to_i)
-    include_fuel = kwargs[:include_fuel] || false
+  def run(file, **kwargs)
+    modules = file.each_line.map(&:to_i)
+    include_fuel = kwargs[:"include-fuel"] || false
     weight = Day1.fuel_requirements(modules, include_fuel)
     puts "The fuel requirements for all the modules is #{weight}."
   end

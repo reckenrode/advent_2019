@@ -14,17 +14,6 @@ require "advent_2019/version"
 module Advent2019
   class Error < StandardError; end
 
-  # Helper method to convert file into a hash containing various ways to view
-  # the given file.
-  # @param [File] file
-  # @return a hash containing :raw access to or the :lines in the file
-  def self.get_file_views(file)
-    {
-      raw: file,
-      lines: file.each_line,
-    }
-  end
-
   # Runs the Advent of Code 2019 solution indicated by the first element of
   # argv.  The remaining elements of argv will be parsed as that day’s
   # command-line arguments.
@@ -36,8 +25,7 @@ module Advent2019
     day = Day.days[argv.shift]
     options = day.parse!(argv)
     File.open(options.delete(:filename), "r") do |file|
-      readers = get_file_views(file)
-      day.run(readers, **options)
+      day.run(file, **options)
     end
   end
 
