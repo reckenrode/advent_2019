@@ -31,10 +31,11 @@ class Day
   # @param [Array<String>] argv the command-line arguments to parse
   # @return [Hash{Symbol->String}] the command-line arguments and their values
   def parse!(argv)
-    parser = OptionParser.new
-    options = configure!(parser)
-    parser.parse!(argv)
-    unless options.has_key?(:filename)
+    options = {}
+    parser = configure!(OptionParser.new)
+    parser.parse!(argv, into: options)
+    puts options
+    unless options.has_key?(:input)
       puts "Missing --input argument, which is required."
       Advent2019.show_help(parser)
     end
@@ -44,15 +45,12 @@ class Day
   protected
 
   def configure!(parser)
-    options = {}
     parser.banner = "Usage: advent_2019 #{self.class::NAME} [options]"
-    parser.on("-iINPUT", "--input INPUT", "the input file") do |filename|
-      options[:filename] = filename
-    end
+    parser.on("-i INPUT", "--input INPUT", "the input file")
     parser.on_tail("-h", "--help", "show this help message") do
       Advent2019.show_help(parser)
     end
-    options
+    parser
   end
 end
 
