@@ -38,6 +38,8 @@ class Day1 < Day
   def run(readers, **kwargs)
     modules = readers[:lines].map(&:to_i)
     include_fuel = kwargs[:include_fuel] || false
+  def run(file, **kwargs)
+    modules = file.each_line.map(&:to_i)
     weight = Day1.fuel_requirements(modules, include_fuel)
     puts "The fuel requirements for all the modules is #{weight}."
   end
