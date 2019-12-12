@@ -34,7 +34,6 @@ class Day
     options = {}
     parser = configure!(OptionParser.new)
     parser.parse!(argv, into: options)
-    puts options
     unless options.has_key?(:input)
       puts "Missing --input argument, which is required."
       Advent2019.show_help(parser)
