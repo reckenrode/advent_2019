@@ -57,14 +57,22 @@ module IntCode
       end
     end
 
+    def self.set_flag(symbol)
+      lambda do |_, registers, _|
+        registers.flag = symbol
+      end
+    end
+
     def decode
       memory[@registers.pc, 4]
     end
 
-    OPCODE_IMPL = {
+    DECODE_ERROR = set_flag(:decode_error)
+
+    OPCODE_IMPL = Hash.new(set_flag(:decode_error)).update({
       1 => call_symbol(:+),
       2 => call_symbol(:*),
-      99 => lambda { |_,registers,_| registers.flag = :stop },
-    }
+      99 => set_flag(:stop),
+    })
   end
 end
