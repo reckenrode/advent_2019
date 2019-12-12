@@ -33,6 +33,10 @@ module IntCode
       @registers = Registers.new(0, nil)
     end
 
+    def execute!
+      step! while @registers.flag != :stop
+    end
+
     def step!
       opcode, operands = decode
       OPCODE_IMPL[opcode].call(operands, registers, memory)
@@ -60,6 +64,7 @@ module IntCode
     OPCODE_IMPL = {
       1 => call_symbol(:+),
       2 => call_symbol(:*),
+      99 => lambda { |_,registers,_| registers.flag = :stop },
     }
   end
 end
