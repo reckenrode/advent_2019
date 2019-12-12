@@ -12,31 +12,54 @@ require "advent_2019/day1"
 
 module IntCode
   OPCODES = [1, 2, 99]
+
+  class Memory < Array
+    def [](*args)
+      if args.count == 1
+        super || 0
+      else
+        super
+      end
+    end
+  end
+
+  Registers = Struct.new(:pc, :flag)
+
   class VM
-    attr_reader :memory, :pc
+    attr_reader :memory, :registers
 
     def initialize(memory)
-      @memory = memory
-      @pc = 0
+      @memory = Memory.new(memory)
+      @registers = Registers.new(0, nil)
     end
 
     def step!
-      @memory[readmem(pc + 3)] = OPCODE_IMPL[readmem(pc)].call(
-        readmem(readmem(pc + 1)),
-        readmem(readmem(pc + 2))
-      )
-      @pc += 4
+      opcode, operands = decode
+      OPCODE_IMPL[opcode].call(operands, registers, memory)
     end
 
     private
 
-    OPCODE_IMPL = {
-      1 => :+.to_proc,
-      2 => :*.to_proc,
-    }
-
-    def readmem(address)
-      memory[address] || 0
+    def self.call_symbol(symbol)
+      proc = symbol.to_proc
+      lambda do |operands, registers, memory|
+        pc = registers.pc
+        memory[memory[pc + 3]] = proc.call(
+          memory[memory[pc + 1]],
+          memory[memory[pc + 2]]
+        )
+        registers.flag = nil
+        registers.pc += 4
+      end
     end
+
+    def decode
+      memory[@registers.pc, 4]
+    end
+
+    OPCODE_IMPL = {
+      1 => call_symbol(:+),
+      2 => call_symbol(:*),
+    }
   end
 end

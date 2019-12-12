@@ -15,7 +15,7 @@ RSpec.shared_examples "IntCode execution" do |parameter|
   it "advances the PC after an opcode is executed" do
     vm = IntCode::VM.new [opcode, 0, 0, 0]
     vm.step!
-    expect(vm.pc).to eq(4)
+    expect(vm.registers.pc).to eq(4)
   end
 end
 
@@ -24,12 +24,12 @@ RSpec.describe IntCode::VM do
     opcode = IntCode::OPCODES.reduce(&:*)
     vm = IntCode::VM.new [opcode, 0, 0, 0]
     vm.step!
-    expect(vm.signal).to eq(:decode_error)
+    expect(vm.registers.flag).to eq(:decode_error)
   end
 
   it "starts the PC at 0" do
     vm = IntCode::VM.new []
-    expect(vm.pc).to eq(0)
+    expect(vm.registers.pc).to eq(0)
   end
 
   it "treats uninitialized memory as 0" do
@@ -62,13 +62,13 @@ RSpec.describe IntCode::VM do
     it "does not advance the PC" do
       vm = IntCode::VM.new [99]
       vm.step!
-      expect(vm.pc).to eq(0)
+      expect(vm.registers.pc).to eq(0)
     end
 
     it "ends execution" do
       vm = IntCode::VM.new [1, 2, 3, 50, 99]
       vm.execute!
-      expect(vm.signal).to eq(:stop)
+      expect(vm.registers.flag).to eq(:stop)
     end
   end
 
