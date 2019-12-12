@@ -32,6 +32,7 @@ module IntCode
 
     OPCODE_IMPL = {
       1 => :+.to_proc,
+      2 => :*.to_proc,
     }
 
     def readmem(address)
