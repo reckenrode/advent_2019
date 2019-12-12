@@ -19,5 +19,23 @@ module IntCode
       @memory = memory
       @pc = 0
     end
+
+    def step!
+      @memory[readmem(pc + 3)] = OPCODE_IMPL[readmem(pc)].call(
+        readmem(readmem(pc + 1)),
+        readmem(readmem(pc + 2))
+      )
+      @pc += 4
+    end
+
+    private
+
+    OPCODE_IMPL = {
+      1 => :+.to_proc,
+    }
+
+    def readmem(address)
+      memory[address] || 0
+    end
   end
 end
