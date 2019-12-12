@@ -24,7 +24,7 @@ module Advent2019
     Day.new
     day = Day.days[argv.shift]
     options = day.parse!(argv)
-    File.open(options.delete(:filename), "r") do |file|
+    File.open(options.delete(:input), "r") do |file|
       day.run(file, **options)
     end
   end
