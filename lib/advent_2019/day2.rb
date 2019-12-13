@@ -33,7 +33,7 @@ class Day2 < Day
           starting_noun))
       puts "Noun: #{noun}, Verb: #{verb} => Output: #{target}"
     else
-    puts "Output: #{run_program(program, kwargs[:noun], kwargs[:verb])}"
+    puts "Output: #{Day2.run_program(program, kwargs[:noun], kwargs[:verb])}"
     end
   end
 
