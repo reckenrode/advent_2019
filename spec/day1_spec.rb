@@ -10,7 +10,7 @@
 
 require "advent_2019/day1"
 
-RSpec.describe Day do
+RSpec.describe Day1 do
   context "calculating fuel for a single module" do
     [
       {name: "should require 0 fuel", input: {mass: 1}, expected: {fuel: 0}},

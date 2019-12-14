@@ -23,21 +23,21 @@ class Day2 < Day
     parser
   end
 
-  def run(file, **kwargs)
+  def run(file, options)
     program = file.read.split(",").map(&:to_i)
-    if target = kwargs[:seek]
-      starting_verb = kwargs[:noun] || 0
-      starting_noun = kwargs[:verb] || 0
+    if target = options[:seek]
+      starting_verb = options[:noun] || 0
+      starting_noun = options[:verb] || 0
       noun, verb = Day2.seek_result(program, target, starting_verb,
         starting_noun, Day2.distance_from_target(program, target, starting_verb,
           starting_noun))
       puts "Noun: #{noun}, Verb: #{verb} => Output: #{target}"
     else
-    puts "Output: #{Day2.run_program(program, kwargs[:noun], kwargs[:verb])}"
+    puts "Output: #{Day2.run_program(program, options[:noun], options[:verb])}"
     end
   end
 
-  private
+  private_class_method
 
   def self.distance_from_target(program, target, noun, verb)
     (target - Day2.run_program(program.dup, noun, verb)).abs
@@ -54,14 +54,12 @@ class Day2 < Day
       [noun + 1, verb - 1],
       [noun + 1, verb],
       [noun + 1, verb + 1],
-    ].filter { |noun, verb| noun >= 0 && verb >= 0 }
+    ].filter { |n, v| n >= 0 && v >= 0 }
     possibilities
-      .map! { |noun, verb|
-        [noun, verb, distance_from_target(program, target, noun, verb)]
-      }
+      .map! { |n, v| [n, v, distance_from_target(program, target, n, v)] }
       .filter! { |_, _, distance| distance < current_distance }
-    noun, verb, distance = possibilities.sample
-    seek_result(program, target, noun, verb, distance)
+    candidate_noun, candidate_verb, distance = possibilities.sample
+    seek_result(program, target, candidate_noun, candidate_verb, distance)
   end
 
   def self.run_program(program, noun, verb)
