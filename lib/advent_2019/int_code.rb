@@ -25,7 +25,7 @@ module IntCode
 
   Registers = Struct.new(:pc, :flags)
 
-  class VM
+  class VirtualMachine
     attr_reader :memory, :registers
 
     def initialize(memory)
