@@ -23,18 +23,18 @@ module IntCode
     end
   end
 
-  Registers = Struct.new(:pc, :flag)
+  Registers = Struct.new(:pc, :flags)
 
   class VM
     attr_reader :memory, :registers
 
     def initialize(memory)
       @memory = Memory.new(memory)
-      @registers = Registers.new(0, nil)
+      @registers = Registers.new(0, Set.new)
     end
 
     def execute!
-      step! while @registers.flag != :stop
+      step! until @registers.flags.include? :stop
     end
 
     def step!
@@ -42,7 +42,7 @@ module IntCode
       OPCODE_IMPL[opcode].call(operands, registers, memory)
     end
 
-    private
+    private_class_method
 
     def self.call_symbol(symbol)
       proc = symbol.to_proc
@@ -52,14 +52,14 @@ module IntCode
           memory[memory[pc + 1]],
           memory[memory[pc + 2]]
         )
-        registers.flag = nil
+        registers.flags.clear
         registers.pc += 4
       end
     end
 
-    def self.set_flag(symbol)
+    def self.set_flags(*symbols)
       lambda do |_, registers, _|
-        registers.flag = symbol
+        registers.flags = *symbols
       end
     end
 
@@ -67,12 +67,12 @@ module IntCode
       memory[@registers.pc, 4]
     end
 
-    DECODE_ERROR = set_flag(:decode_error)
+    DECODE_ERROR = set_flags(:decode_error, :stop)
 
-    OPCODE_IMPL = Hash.new(set_flag(:decode_error)).update({
+    OPCODE_IMPL = Hash.new(DECODE_ERROR).update({
       1 => call_symbol(:+),
       2 => call_symbol(:*),
-      99 => set_flag(:stop),
+      99 => set_flags(:stop),
     })
   end
 end

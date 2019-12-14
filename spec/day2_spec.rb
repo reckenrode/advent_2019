@@ -20,13 +20,6 @@ RSpec.shared_examples "IntCode execution" do |parameter|
 end
 
 RSpec.describe IntCode::VM do
-  it "raises an error when it encounters an unknown opcode" do
-    opcode = IntCode::OPCODES.reduce(&:*)
-    vm = IntCode::VM.new [opcode, 0, 0, 0]
-    vm.step!
-    expect(vm.registers.flag).to eq(:decode_error)
-  end
-
   it "starts the PC at 0" do
     vm = IntCode::VM.new []
     expect(vm.registers.pc).to eq(0)
@@ -36,6 +29,26 @@ RSpec.describe IntCode::VM do
     vm = IntCode::VM.new [1, nil, nil, nil]
     vm.step!
     expect(vm.memory[0]).to eq(2)
+  end
+
+  context "unknown opcodes" do
+    opcode = IntCode::OPCODES.reduce(&:*)
+    program = [opcode, 0, 0, 0]
+    vm = nil
+
+    before do
+      vm = IntCode::VM.new(program.dup)
+    end
+
+    it "raises an error" do
+      vm.step!
+      expect(vm.registers.flags).to include(:decode_error)
+    end
+
+    it "halts execution" do
+      vm.execute!
+      expect(vm.registers.flags).to include(:stop)
+    end
   end
 
   context "opcode 1" do
@@ -68,7 +81,7 @@ RSpec.describe IntCode::VM do
     it "ends execution" do
       vm = IntCode::VM.new [1, 2, 3, 50, 99]
       vm.execute!
-      expect(vm.registers.flag).to eq(:stop)
+      expect(vm.registers.flags).to include(:stop)
     end
   end
 
