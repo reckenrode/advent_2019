@@ -63,7 +63,7 @@ class Day2 < Day
   end
 
   def self.run_program(program, noun, verb)
-    vm = IntCode::VM.new(program)
+    vm = IntCode::VirtualMachine.new(program)
     vm.memory[1] = noun
     vm.memory[2] = verb
     vm.execute!
