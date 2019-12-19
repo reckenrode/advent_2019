@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
-require "advent_2019"
+require 'advent_2019'
 
 Advent2019.main(ARGV)
