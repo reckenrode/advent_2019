@@ -19,7 +19,7 @@ module IntCode
       if args.count == 1
         super || 0
       else
-        super
+        super.map! { |x| x.nil? ? 0 : x  }
       end
     end
   end
@@ -43,7 +43,7 @@ module IntCode
     end
 
     def step!
-      opcode, parameters = decode
+      opcode, *parameters = decode
       OPCODE_IMPL[opcode].call(parameters, registers, memory)
     end
 
@@ -55,9 +55,9 @@ module IntCode
 
     def self.call_symbol(symbol)
       proc = symbol.to_proc
-      lambda do |operands, registers, memory|
-        ip = registers.instruction_pointer
-        memory[memory[ip + 3]] = proc.call(*operands)
+      lambda do |parameters, registers, memory|
+        memory[parameters[2]] = proc.call(memory[parameters[0]],
+                                          memory[parameters[1]])
         registers.flags.clear
         registers.instruction_pointer += 4
       end
