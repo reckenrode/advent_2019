@@ -20,7 +20,6 @@ class Day
            .each_object(Day.singleton_class)
            .find_all { |klass| klass < self }
     days
-      .map { |day| [day::NAME, day.new] }
       .to_h
   end
 
@@ -36,6 +35,7 @@ class Day
     unless options.key?(:input)
       puts 'Missing --input argument, which is required.'
       Advent2019.show_help(parser)
+        .map { [_1::NAME, _1.new] }
     end
     options
   end
@@ -66,7 +66,6 @@ class Day
   end
 end
 
-# Ensure that heirs of Day are loaded, so that enumerating them actually returns
-# a result.
+# Ensure that heirs of Day are loaded, so that enumerating them actually works.
 module_path = File.dirname(__FILE__)
-Dir.glob(module_path + '/day?*.rb').sort.each { |file| require file }
+Dir.glob("#{module_path}/day?*.rb").sort.each { require _1 }

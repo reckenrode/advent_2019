@@ -19,7 +19,7 @@ module IntCode
       if args.count == 1
         super || 0
       else
-        super.map! { |x| x.nil? ? 0 : x  }
+        super.map! { _1 || 0 }
       end
     end
   end
