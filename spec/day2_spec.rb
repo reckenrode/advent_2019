@@ -86,31 +86,21 @@ RSpec.describe Advent2019::IntCode::VirtualMachine do
 
   context 'sample programs' do
     [
-      {
-        number: 1,
+      { number: 1,
         input: { program: [1, 9, 10, 3, 2, 3, 11, 0, 99, 30, 40, 50] },
-        expected: { memory: [3500, 9, 10, 70, 2, 3, 11, 0, 99, 30, 40, 50] }
-      },
-      {
-        number: 2,
+        expected: { memory: [3500, 9, 10, 70, 2, 3, 11, 0, 99, 30, 40, 50] } },
+      { number: 2,
         input: { program: [1, 0, 0, 0, 99] },
-        expected: { memory: [2, 0, 0, 0, 99] }
-      },
-      {
-        number: 3,
+        expected: { memory: [2, 0, 0, 0, 99] } },
+      { number: 3,
         input: { program: [2, 3, 0, 3, 99] },
-        expected: { memory: [2, 3, 0, 6, 99] }
-      },
-      {
-        number: 4,
+        expected: { memory: [2, 3, 0, 6, 99] } },
+      { number: 4,
         input: { program: [2, 4, 4, 5, 99, 0] },
-        expected: { memory: [2, 4, 4, 5, 99, 9801] }
-      },
-      {
-        number: 5,
+        expected: { memory: [2, 4, 4, 5, 99, 9801] } },
+      { number: 5,
         input: { program: [1, 1, 1, 4, 99, 5, 6, 0, 99] },
-        expected: { memory: [30, 1, 1, 4, 2, 5, 6, 0, 99] }
-      }
+        expected: { memory: [30, 1, 1, 4, 2, 5, 6, 0, 99] } }
     ].each do |test_case|
       it "##{test_case[:number]} executes correctly" do
         vm = Advent2019::IntCode::VirtualMachine.new(test_case[:input][:program])

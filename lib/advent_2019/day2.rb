@@ -18,8 +18,7 @@ module Advent2019
     def configure!(parser)
       parser.on('--noun NOUN', 'set the noun to NOUN', Integer)
       parser.on('--verb VERB', 'set the verb to VERB', Integer)
-      parser.on('--seek RESULT', 'seek the result by varying the verb and noun',
-                Integer)
+      parser.on('--seek RESULT', 'seek the result by varying the verb and noun', Integer)
     end
 
     # @param [Hash{Symbol=>Integer}] options
@@ -27,8 +26,7 @@ module Advent2019
       prog = file.read.split(',').map(&:to_i)
       target = options[:seek]
       if target
-        noun, verb = Day2.seek_result(prog, target, options[:verb] || 0,
-                                      options[:noun] || 0)
+        noun, verb = Day2.seek_result(prog, target, options[:verb] || 0, options[:noun] || 0)
         puts "Noun: #{noun}, Verb: #{verb} => Output: #{target}"
       else
         puts "Output: #{Day2.run_program(prog, options[:noun], options[:verb])}"
@@ -56,8 +54,7 @@ module Advent2019
     # @param [Integer] current_distance the distance to the `target`
     # @return [Array<Integer>] the noun and verb resulting in `target`
     def self.seek_result(program, target, noun, verb,
-                         current_distance = distance_from_target(program, target,
-                                                                 noun, verb))
+                         current_distance = distance_from_target(program, target, noun, verb))
       return [noun, verb] if current_distance.zero?
 
       possibilities = enumerate_neighbors(noun, verb)
@@ -97,7 +94,6 @@ module Advent2019
       vm.memory[0]
     end
 
-    private_class_method :distance_from_target, :seek_result,
-                         :enumerate_neighbors, :run_program
+    private_class_method :distance_from_target, :seek_result, :enumerate_neighbors, :run_program
   end
 end

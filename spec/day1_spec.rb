@@ -18,7 +18,9 @@ RSpec.describe Advent2019::Day1 do
       { name: 'is evenly divisible',
         input: { mass: 12 },
         expected: { fuel: 2 } },
-      { name: 'needs rounding', input: { mass: 14 }, expected: { fuel: 2 } },
+      { name: 'needs rounding',
+        input: { mass: 14 },
+        expected: { fuel: 2 } },
       { name: 'is large',
         input: { mass: 100_756 },
         expected: { fuel: 33_583 } }
@@ -32,8 +34,12 @@ RSpec.describe Advent2019::Day1 do
 
   context 'calculating fuel including the mass of the fuel' do
     [
-      { name: 'no mass', input: { mass: 14 }, expected: { fuel: 2 } },
-      { name: 'more fuel', input: { mass: 1969 }, expected: { fuel: 966 } },
+      { name: 'no mass',
+        input: { mass: 14 },
+        expected: { fuel: 2 } },
+      { name: 'more fuel',
+        input: { mass: 1969 },
+        expected: { fuel: 966 } },
       { name: 'lots more fuel',
         input: { mass: 100_756 },
         expected: { fuel: 50_346 } }

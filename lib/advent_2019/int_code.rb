@@ -57,8 +57,7 @@ module Advent2019
       def self.call_symbol(symbol)
         proc = symbol.to_proc
         lambda do |parameters, registers, memory|
-          memory[parameters[2]] = proc.call(memory[parameters[0]],
-                                            memory[parameters[1]])
+          memory[parameters[2]] = proc.call(memory[parameters[0]], memory[parameters[1]])
           registers.flags.clear
           registers.instruction_pointer += 4
         end
