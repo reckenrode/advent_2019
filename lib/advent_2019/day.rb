@@ -20,6 +20,7 @@ class Day
            .each_object(Day.singleton_class)
            .find_all { |klass| klass < self }
     days
+      .map { [_1::NAME, _1.new] }
       .to_h
   end
 
@@ -35,7 +36,6 @@ class Day
     unless options.key?(:input)
       puts 'Missing --input argument, which is required.'
       Advent2019.show_help(parser)
-        .map { [_1::NAME, _1.new] }
     end
     options
   end

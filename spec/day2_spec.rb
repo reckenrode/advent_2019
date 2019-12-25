@@ -12,31 +12,31 @@ require 'advent_2019/int_code'
 RSpec.shared_examples 'IntCode execution' do |parameter|
   opcode = parameter[:opcode]
   it 'advances the PC after an opcode is executed' do
-    vm = IntCode::VirtualMachine.new [opcode, 0, 0, 0]
+    vm = Advent2019::IntCode::VirtualMachine.new [opcode, 0, 0, 0]
     vm.step!
     expect(vm.registers.instruction_pointer).to eq(4)
   end
 end
 
-RSpec.describe IntCode::VirtualMachine do
+RSpec.describe Advent2019::IntCode::VirtualMachine do
   it 'starts the PC at 0' do
-    vm = IntCode::VirtualMachine.new []
+    vm = Advent2019::IntCode::VirtualMachine.new []
     expect(vm.registers.instruction_pointer).to eq(0)
   end
 
   it 'treats uninitialized memory as 0' do
-    vm = IntCode::VirtualMachine.new [1, nil, nil, nil]
+    vm = Advent2019::IntCode::VirtualMachine.new [1, nil, nil, nil]
     vm.step!
     expect(vm.memory[0]).to eq(2)
   end
 
   context 'unknown opcodes' do
-    opcode = IntCode::OPCODES.reduce(&:*)
+    opcode = Advent2019::IntCode::OPCODES.reduce(&:*)
     program = [opcode, 0, 0, 0]
     vm = nil
 
     before do
-      vm = IntCode::VirtualMachine.new(program.dup)
+      vm = Advent2019::IntCode::VirtualMachine.new(program.dup)
     end
 
     it 'raises an error' do
@@ -54,7 +54,7 @@ RSpec.describe IntCode::VirtualMachine do
     include_examples 'IntCode execution', opcode: 1
 
     it 'adds position 1 to position 2 and writes it to position 3' do
-      vm = IntCode::VirtualMachine.new [1, 10, 20, 30]
+      vm = Advent2019::IntCode::VirtualMachine.new [1, 10, 20, 30]
       vm.step!
       expect(vm.memory[30]).to eq(0)
     end
@@ -64,7 +64,7 @@ RSpec.describe IntCode::VirtualMachine do
     include_examples 'IntCode execution', opcode: 2
 
     it 'multiplies position 1 to position 2 and writes it to position 3' do
-      vm = IntCode::VirtualMachine.new [2, 1, 2, 15]
+      vm = Advent2019::IntCode::VirtualMachine.new [2, 1, 2, 15]
       vm.step!
       expect(vm.memory[15]).to eq(2)
     end
@@ -72,13 +72,13 @@ RSpec.describe IntCode::VirtualMachine do
 
   context 'opcode 99' do
     it 'does not advance the PC' do
-      vm = IntCode::VirtualMachine.new [99]
+      vm = Advent2019::IntCode::VirtualMachine.new [99]
       vm.step!
       expect(vm.registers.instruction_pointer).to eq(0)
     end
 
     it 'ends execution' do
-      vm = IntCode::VirtualMachine.new [1, 2, 3, 50, 99]
+      vm = Advent2019::IntCode::VirtualMachine.new [1, 2, 3, 50, 99]
       vm.execute!
       expect(vm.registers.flags).to include(:stop)
     end
@@ -113,7 +113,7 @@ RSpec.describe IntCode::VirtualMachine do
       }
     ].each do |test_case|
       it "##{test_case[:number]} executes correctly" do
-        vm = IntCode::VirtualMachine.new(test_case[:input][:program])
+        vm = Advent2019::IntCode::VirtualMachine.new(test_case[:input][:program])
         vm.execute!
         expect(vm.memory).to eq(test_case[:expected][:memory])
       end
