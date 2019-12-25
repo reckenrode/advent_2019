@@ -9,7 +9,7 @@
 
 require 'advent_2019/day1'
 
-RSpec.describe Day1 do
+RSpec.describe Advent2019::Day1 do
   context 'calculating fuel for a single module' do
     [
       { name: 'should require 0 fuel',
@@ -18,13 +18,15 @@ RSpec.describe Day1 do
       { name: 'is evenly divisible',
         input: { mass: 12 },
         expected: { fuel: 2 } },
-      { name: 'needs rounding', input: { mass: 14 }, expected: { fuel: 2 } },
+      { name: 'needs rounding',
+        input: { mass: 14 },
+        expected: { fuel: 2 } },
       { name: 'is large',
         input: { mass: 100_756 },
         expected: { fuel: 33_583 } }
     ].each do |test_case|
       it "the mass #{test_case[:name]}" do
-        fuel = Day1.fuel_requirements(test_case[:input][:mass])
+        fuel = Advent2019::Day1.fuel_requirements(test_case[:input][:mass])
         expect(fuel).to eq(test_case[:expected][:fuel])
       end
     end
@@ -32,14 +34,18 @@ RSpec.describe Day1 do
 
   context 'calculating fuel including the mass of the fuel' do
     [
-      { name: 'no mass', input: { mass: 14 }, expected: { fuel: 2 } },
-      { name: 'more fuel', input: { mass: 1969 }, expected: { fuel: 966 } },
+      { name: 'no mass',
+        input: { mass: 14 },
+        expected: { fuel: 2 } },
+      { name: 'more fuel',
+        input: { mass: 1969 },
+        expected: { fuel: 966 } },
       { name: 'lots more fuel',
         input: { mass: 100_756 },
         expected: { fuel: 50_346 } }
     ].each do |test_case|
       it "the fuel requires #{test_case[:name]}" do
-        fuel = Day1.fuel_requirements(test_case[:input][:mass], true)
+        fuel = Advent2019::Day1.fuel_requirements(test_case[:input][:mass], true)
         expect(fuel).to eq(test_case[:expected][:fuel])
       end
     end
@@ -47,12 +53,12 @@ RSpec.describe Day1 do
 
   context 'calculating fuel for multiple modules' do
     it 'doesn’t consider fuel mass' do
-      fuel = Day1.fuel_requirements([9, 20])
+      fuel = Advent2019::Day1.fuel_requirements([9, 20])
       expect(fuel).to eq(5)
     end
 
     it 'considers fuel mass' do
-      fuel = Day1.fuel_requirements([9, 40], true)
+      fuel = Advent2019::Day1.fuel_requirements([9, 40], true)
       expect(fuel).to eq(13)
     end
   end
